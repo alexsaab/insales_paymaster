@@ -1,5 +1,6 @@
 <?php
 require 'common.php';
+require 'lib.php';
 
 $shop_id = $_POST['shop_id'];
 

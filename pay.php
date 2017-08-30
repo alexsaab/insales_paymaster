@@ -1,5 +1,6 @@
 ﻿<?php
 require 'common.php';
+require 'lib.php';
 
 if (!isset($_POST['shop_id']))
 {
@@ -31,12 +32,14 @@ try
 			'LMI_PAYMENT_DESC'   => "Оплата счета #" . $order['number'],
 			'LMI_PAYMENT_NO'     => $order['id'],
 			'LMI_MERCHANT_ID'    => $shop['merchant_id'],
-			'LMI_CURRENCY'       => 'RUR',
+			'LMI_CURRENCY'       => 'RUB',
 			'shop_id'            => $shop_id,
 			'key'                => $_POST['key'],
 			'transaction_id'     => $_POST['transaction_id'],
-			'sign'               => md5($amount . $order['id'] . $shop['secret_key']),
+			'SIGN'               => paymasterGetSign($shop['merchant_id'],$order['id'],$amount,'RUB',$shop['secret_key'],$shop['hash_method']),
 		);
+
+//		logF($order);
 
 		foreach ($order['order_lines'] as $key => $product)
 		{
@@ -58,7 +61,7 @@ try
 		{
 			$form .= '<input type="hidden" name="' . $key . '" value="' . $value . '">' . PHP_EOL;
 		}
-		$form .= '<input type="submit" value="Оплатить">' . PHP_EOL . '</form>';
+		$form .= '<input type="submit" value="Оплатить" style="display: none">' . PHP_EOL . '</form>';
 		$form .= '<script>document.getElementById("paymaster_form").submit();</script>';
 
 		echo $form;
@@ -67,5 +70,5 @@ try
 }
 catch (Exception $e)
 {
-	//echo $e->getMessage();
+	echo $e->getMessage();
 }

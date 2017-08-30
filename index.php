@@ -32,6 +32,7 @@ if (isset($_POST['merchant_id']) && isset($_POST['secret_key']))
 	$data[$insales_id]['merchant_id']      = $_POST['merchant_id'];
 	$data[$insales_id]['secret_key']       = $_POST['secret_key'];
 	$data[$insales_id]['payment_password'] = $_POST['payment_password'];
+	$data[$insales_id]['hash_method'] = $_POST['hash_method'];
 	$data[$insales_id]['vat_products'] = $_POST['vat_products'];
 	$data[$insales_id]['vat_delivery'] = $_POST['vat_delivery'];
 
@@ -102,6 +103,16 @@ if (isset($_POST['merchant_id']) && isset($_POST['secret_key']))
             <input type="text" name="secret_key"
                    value="<?php echo isset($data[$insales_id]['secret_key']) ? $data[$insales_id]['secret_key'] : '' ?>"
                    class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Метод шифрования ключа</label>
+        <div class="col-sm-4">
+            <select class="form-control" id="hash_method"  name="hash_method">
+                <option value="md5" <?php echo ($data[$insales_id]['hash_method']=='md5') ? 'selected' : ''; ?>>md5</option>
+                <option value="sha1" <?php echo ($data[$insales_id]['hash_method']=='sha1') ? 'selected' : ''; ?>>sha1</option>
+                <option value="sha256" <?php echo ($data[$insales_id]['hash_method']=='sha256') ? 'selected' : ''; ?>>sha256</option>
+            </select>
         </div>
     </div>
     <div class="form-group">
