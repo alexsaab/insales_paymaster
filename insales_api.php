@@ -1,7 +1,7 @@
 <?php
 function insales_api_client($my_insales_domain, $api_key, $password)
 {
-	$baseurl = "http://$api_key:$password@$my_insales_domain/";
+	$baseurl = "https://$api_key:$password@$my_insales_domain/";
 
 	return function ($method, $path, $params = array(), &$response_headers = array()) use ($baseurl) {
 		$url             = $baseurl . ltrim($path, '/');
@@ -44,7 +44,7 @@ function curl_setopts_($ch, $method, $payload, $request_headers)
 {
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	//curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 	curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
@@ -111,3 +111,5 @@ class InsalesApiException extends Exception
 		return $this->info;
 	}
 }
+
+?>

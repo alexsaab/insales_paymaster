@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		$amount = sprintf("%.2f", $_POST["LMI_PAYMENT_AMOUNT"]);
 
 		$sign = paymasterGetSign($_POST["LMI_MERCHANT_ID"], $_POST["LMI_PAYMENT_NO"], $amount, $_POST["LMI_CURRENCY"], $shop['secret_key'], $shop['hash_method']);
+		
 
 
 		if (($_POST["LMI_HASH"] == $hash) && ($_POST["SIGN"] == $sign))

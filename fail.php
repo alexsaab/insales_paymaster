@@ -22,9 +22,12 @@ try {
     $transaction_id = $_POST['transaction_id'];
     $key = $_POST['key'];
     
-    if($_POST["sign"] != md5($_POST["LMI_PAYMENT_AMOUNT"].$_POST['LMI_PAYMENT_NO'].$shop['secret_key'])) {
-      die;
-    }
+    $sign = paymasterGetSign($shop['merchant_id'],$order['id'],$amount,'RUB',$shop['secret_key'],$shop['hash_method']);
+
+		if ($_POST["SIGN"] != $sign)
+		{
+			die;
+		}
     
     echo '
     <form id="paymaster_form" action="http://'.$shop['shop'].'/payments/external/'.$order['payment_gateway_id'].'/fail" method="POST">
@@ -39,7 +42,7 @@ try {
   }
 } 
 catch (Exception $e) {
-  //echo $e->getMessage();
+  echo $e->getMessage();
 }
 
 ?>

@@ -1,5 +1,7 @@
-﻿<?php
+<?php
+
 require 'common.php';
+
 if (isset($_GET['insales_id']))
 {
 	$insales_id = $_GET['insales_id'];
@@ -62,7 +64,7 @@ if (isset($_POST['merchant_id']) && isset($_POST['secret_key']))
 
         <div class="navbar-header pull-right">
             <a class="navbar-brand"
-               href="<?php echo 'http://' . $data[$_SESSION['insales_id']]['shop'] . '/admin2/dashboard'; ?>">Бэкофис
+               href="<?php echo 'https://' . $data[$_SESSION['insales_id']]['shop'] . '/admin2/dashboard'; ?>">Бэкофис
                 Insales</a>
         </div>
 
@@ -70,7 +72,7 @@ if (isset($_POST['merchant_id']) && isset($_POST['secret_key']))
             <a class="navbar-brand" href="https://paymaster.ru/Partners/authentication/login">Аторизация в Paymaster</a>
         </div>
         <div class="navbar-header pull-right">
-            <a class="navbar-brand" href="http://info.paymaster.ru">Регистрация в Paymaster</a>
+            <a class="navbar-brand" href="https://info.paymaster.ru">Регистрация в Paymaster</a>
         </div>
     </div>
 </nav>

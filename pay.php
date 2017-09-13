@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require 'common.php';
 require 'lib.php';
 
@@ -20,6 +20,8 @@ $insales_domain = $shop['shop'];
 $api_key        = $login;
 $password       = $shop['password'];
 
+$actualAppLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://{$_SERVER[HTTP_HOST]}/";
+
 $insales_api = insales_api_client($insales_domain, $api_key, $password);
 try
 {
@@ -37,9 +39,11 @@ try
 			'key'                => $_POST['key'],
 			'transaction_id'     => $_POST['transaction_id'],
 			'SIGN'               => paymasterGetSign($shop['merchant_id'],$order['id'],$amount,'RUB',$shop['secret_key'],$shop['hash_method']),
+			'LMI_PAYMENT_NOTIFICATION_URL' => $actualAppLink.'result.php',
+			'LMI_SUCCESS_URL'    => $actualAppLink.'success.php',
+			'LMI_FAIL_URL'       => $actualAppLink.'fail.php',
 		);
-
-//		logF($order);
+		
 
 		foreach ($order['order_lines'] as $key => $product)
 		{
@@ -48,6 +52,8 @@ try
 			$fields["LMI_SHOPPINGCART.ITEM[{$key}].PRICE"] = $product['full_sale_price'];
 			$fields["LMI_SHOPPINGCART.ITEM[{$key}].TAX"]   = $shop['vat_products'];
 		}
+		
+		
 
 		// Теперь добавили доставку
 		$key++;
