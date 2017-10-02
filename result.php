@@ -18,12 +18,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	}
 	else
 	{
+		if (!isset($shop['hash_method']))
+		{
+			$shop['hash_method'] = 'md5';
+		}
+
 		$hash = paymasterGetHash($_POST["LMI_MERCHANT_ID"], $_POST["LMI_PAYMENT_NO"], $_POST["LMI_SYS_PAYMENT_ID"], $_POST["LMI_SYS_PAYMENT_DATE"], $_POST["LMI_PAYMENT_AMOUNT"], $_POST["LMI_CURRENCY"], $_POST["LMI_PAID_AMOUNT"], $_POST["LMI_PAID_CURRENCY"], $_POST["LMI_PAYMENT_SYSTEM"], $_POST["LMI_SIM_MODE"], $shop['secret_key'], $shop['hash_method']);
 
 		$amount = sprintf("%.2f", $_POST["LMI_PAYMENT_AMOUNT"]);
 
 		$sign = paymasterGetSign($_POST["LMI_MERCHANT_ID"], $_POST["LMI_PAYMENT_NO"], $amount, $_POST["LMI_CURRENCY"], $shop['secret_key'], $shop['hash_method']);
-		
+
 
 
 		if (($_POST["LMI_HASH"] == $hash) && ($_POST["SIGN"] == $sign))

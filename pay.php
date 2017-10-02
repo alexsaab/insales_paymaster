@@ -30,37 +30,40 @@ try
 	{
 		$amount = sprintf("%.2f", $_POST['amount']);
 		$fields = array(
-			'LMI_PAYMENT_AMOUNT' => $amount,
-			'LMI_PAYMENT_DESC'   => "Оплата счета #" . $order['number'],
-			'LMI_PAYMENT_NO'     => $order['id'],
-			'LMI_MERCHANT_ID'    => $shop['merchant_id'],
-			'LMI_CURRENCY'       => 'RUB',
-			'shop_id'            => $shop_id,
-			'key'                => $_POST['key'],
-			'transaction_id'     => $_POST['transaction_id'],
-			'SIGN'               => paymasterGetSign($shop['merchant_id'],$order['id'],$amount,'RUB',$shop['secret_key'],$shop['hash_method']),
-			'LMI_PAYMENT_NOTIFICATION_URL' => $actualAppLink.'result.php',
-			'LMI_SUCCESS_URL'    => $actualAppLink.'success.php',
-			'LMI_FAIL_URL'       => $actualAppLink.'fail.php',
+			'LMI_PAYMENT_AMOUNT'           => $amount,
+			'LMI_PAYMENT_DESC'             => "Оплата счета #" . $order['number'],
+			'LMI_PAYMENT_NO'               => $order['id'],
+			'LMI_MERCHANT_ID'              => $shop['merchant_id'],
+			'LMI_CURRENCY'                 => 'RUB',
+			'shop_id'                      => $shop_id,
+			'key'                          => $_POST['key'],
+			'transaction_id'               => $_POST['transaction_id'],
+			'SIGN'                         => paymasterGetSign($shop['merchant_id'], $order['id'], $amount, 'RUB', $shop['secret_key'], $shop['hash_method']),
+			'LMI_PAYMENT_NOTIFICATION_URL' => $actualAppLink . 'result.php',
+			'LMI_SUCCESS_URL'              => $actualAppLink . 'success.php',
+			'LMI_FAIL_URL'                 => $actualAppLink . 'fail.php',
 		);
-		
 
-		foreach ($order['order_lines'] as $key => $product)
+		//Проверяем все ли нормально и есть ли прописанные VAT для доставки и продуктов
+		if (isset($shop['vat_products']) && isset($shop['vat_delivery']))
 		{
-			$fields["LMI_SHOPPINGCART.ITEM[{$key}].NAME"]  = htmlspecialchars($product['title']);
-			$fields["LMI_SHOPPINGCART.ITEM[{$key}].QTY"]   = $product['quantity'];
-			$fields["LMI_SHOPPINGCART.ITEM[{$key}].PRICE"] = $product['full_sale_price'];
-			$fields["LMI_SHOPPINGCART.ITEM[{$key}].TAX"]   = $shop['vat_products'];
-		}
-		
-		
+			foreach ($order['order_lines'] as $key => $product)
+			{
+				$fields["LMI_SHOPPINGCART.ITEM[{$key}].NAME"]  = htmlspecialchars($product['title']);
+				$fields["LMI_SHOPPINGCART.ITEM[{$key}].QTY"]   = $product['quantity'];
+				$fields["LMI_SHOPPINGCART.ITEM[{$key}].PRICE"] = $product['full_sale_price'];
+				$fields["LMI_SHOPPINGCART.ITEM[{$key}].TAX"]   = $shop['vat_products'];
+			}
 
-		// Теперь добавили доставку
-		$key++;
-		$fields["LMI_SHOPPINGCART.ITEM[{$key}].NAME"]  = htmlspecialchars($order['delivery_description']);
-		$fields["LMI_SHOPPINGCART.ITEM[{$key}].QTY"]   = 1;
-		$fields["LMI_SHOPPINGCART.ITEM[{$key}].PRICE"] = $order['full_delivery_price'];
-		$fields["LMI_SHOPPINGCART.ITEM[{$key}].TAX"]   = $shop['vat_delivery'];
+
+			// Теперь добавили доставку
+			$key++;
+			$fields["LMI_SHOPPINGCART.ITEM[{$key}].NAME"]  = htmlspecialchars($order['delivery_description']);
+			$fields["LMI_SHOPPINGCART.ITEM[{$key}].QTY"]   = 1;
+			$fields["LMI_SHOPPINGCART.ITEM[{$key}].PRICE"] = $order['full_delivery_price'];
+			$fields["LMI_SHOPPINGCART.ITEM[{$key}].TAX"]   = $shop['vat_delivery'];
+		}
+
 
 		$form = '<form id="paymaster_form" method="POST" action="https://paymaster.ru/Payment/Init">' . PHP_EOL;
 		foreach ($fields as $key => $value)

@@ -25,7 +25,7 @@ try
 		$amount         = $_POST['LMI_PAYMENT_AMOUNT'];
 		$transaction_id = $_POST['transaction_id'];
 		$key            = $_POST['key'];
-		
+
 		$sign = paymasterGetSign($shop['merchant_id'],$order['id'],$amount,'RUB',$shop['secret_key'],$shop['hash_method']);
 
 		if ($_POST["SIGN"] != $sign)
@@ -51,4 +51,3 @@ catch (Exception $e)
 }
 
 ?>
-
