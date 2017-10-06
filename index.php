@@ -1,6 +1,7 @@
 <?php
 
 require 'common.php';
+require 'lib.php';
 
 if (isset($_GET['insales_id']))
 {

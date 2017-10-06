@@ -15,6 +15,10 @@
  */
 function paymasterGetHash($LMI_MERCHANT_ID, $LMI_PAYMENT_NO, $LMI_SYS_PAYMENT_ID, $LMI_SYS_PAYMENT_DATE, $LMI_PAYMENT_AMOUNT, $LMI_CURRENCY, $LMI_PAID_AMOUNT, $LMI_PAID_CURRENCY, $LMI_PAYMENT_SYSTEM, $LMI_SIM_MODE, $SECRET, $hash_method = 'md5')
 {
+	if (!$hash_method) {
+		$hash_method = 'md5';
+	}
+
 	$string = $LMI_MERCHANT_ID . ";" . $LMI_PAYMENT_NO . ";" . $LMI_SYS_PAYMENT_ID . ";" . $LMI_SYS_PAYMENT_DATE . ";" . $LMI_PAYMENT_AMOUNT . ";" . $LMI_CURRENCY . ";" . $LMI_PAID_AMOUNT . ";" . $LMI_PAID_CURRENCY . ";" . $LMI_PAYMENT_SYSTEM . ";" . $LMI_SIM_MODE . ";" . $SECRET;
 
 	$hash = base64_encode(hash($hash_method, $string, true));
@@ -37,6 +41,10 @@ function paymasterGetHash($LMI_MERCHANT_ID, $LMI_PAYMENT_NO, $LMI_SYS_PAYMENT_ID
  */
 function paymasterGetSign($merchant_id, $order_id, $amount, $lmi_currency, $secret_key, $sign_method = 'md5')
 {
+
+	if (!$sign_method) {
+		$sign_method = 'md5';
+	}
 
 	$plain_sign = $merchant_id . $order_id . $amount . $lmi_currency . $secret_key;
 	$sign       = base64_encode(hash($sign_method, $plain_sign, true));
